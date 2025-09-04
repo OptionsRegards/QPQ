@@ -1,0 +1,24 @@
+[
+  {
+    "name": "Unconsolidated HQ",
+    "lat": 43.1566,
+    "lng": -77.6088,
+    "category": "Analytics",
+    "address": "Rochester, NY, USA",
+    "url": "https://example.com"
+  },
+  {
+    "name": "Nexus Foods",
+    "lat": 34.0522,
+    "lng": -118.2437,
+    "category": "Consumer",
+    "address": "Los Angeles, CA, USA"
+  },
+  {
+    "name": "EuroTech GmbH",
+    "lat": 52.52,
+    "lng": 13.405,
+    "category": "Technology",
+    "address": "Berlin, Germany"
+  }
+]
