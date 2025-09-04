@@ -1,24 +1,42 @@
-[
-  {
-    "name": "Unconsolidated HQ",
-    "lat": 43.1566,
-    "lng": -77.6088,
-    "category": "Analytics",
-    "address": "Rochester, NY, USA",
-    "url": "https://example.com"
-  },
-  {
-    "name": "Nexus Foods",
-    "lat": 34.0522,
-    "lng": -118.2437,
-    "category": "Consumer",
-    "address": "Los Angeles, CA, USA"
-  },
-  {
-    "name": "EuroTech GmbH",
-    "lat": 52.52,
-    "lng": 13.405,
-    "category": "Technology",
-    "address": "Berlin, Germany"
-  }
+{
+"companies": [
+{
+"id": "NG",
+"ticker": "NG",
+"name": "NOVAGOLD RESOURCES INC.",
+"lat": 61.869,
+"lng": -158.106,
+"address": "PO Box 69, Crooked Creek, AK 99575",
+"desc": "A goldmine in Alaska",
+"long_short": "Short",
+"why": "Because the mine won't be built and the ticker is a way to hype gold to investors and then dump worthless shares to them.",
+"price": 6.7
+}
+],
+"investors": [
+{
+"id": "ghisallo",
+"name": "Ghisallo Capital Management LLC",
+"lat": 42.349,
+"lng": -71.085,
+"address": "240 Newbury St, 2nd Fl, Boston, MA 02116",
+"notes": "Trump's Treasury pick Bessent reportedly seeded this hedge fund."
+},
+{
+"id": "bam",
+"name": "Balyasny Asset Management L.P.",
+"lat": 30.267,
+"lng": -97.743,
+"address": "303 Colorado St, Austin, TX 78701",
+"notes": "Holds QXO & DWAC positions."
+}
+],
+"links": [
+{ "investor_id": "ghisallo", "company_id": "NG", "units": 1741510, "instrument": "Shares" },
+{ "investor_id": "bam", "company_id": "NG", "units": 585351, "instrument": "Shares" }
+],
+"landmarks": [
+{ "name": "Mar-a-Lago", "lat": 26.677, "lng": -80.034, "type": "triangle" },
+{ "name": "The White House", "lat": 38.8977, "lng": -77.0365, "type": "star" }
 ]
+}
