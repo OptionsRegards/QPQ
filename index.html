@@ -17,7 +17,6 @@
       crossorigin=""
     ></script>
 
-    <!-- Simple, clean styles -->
     <style>
       :root {
         --bg: #0f172a; /* slate-900 */
@@ -29,61 +28,50 @@
         --link: #f59e0b; /* arcs */
       }
       html, body { height: 100%; margin: 0; }
-      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--text); }
+      /* Make text ~25% bigger everywhere */
+      body {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial;
+        background: var(--bg);
+        color: var(--text);
+        font-size: 20px; /* was ~16px */
+        line-height: 1.45;
+      }
       #map { height: 100vh; width: 100%; }
 
-      .app-header {
-        position: fixed; z-index: 1000; top: 12px; left: 50%; transform: translateX(-50%);
-        background: var(--panel); backdrop-filter: blur(6px);
-        border: 1px solid #1f2937; border-radius: 16px; padding: 8px 14px;
-        display: flex; gap: 10px; align-items: center;
-        box-shadow: 0 8px 24px rgba(0,0,0,.35);
-      }
-      .app-header h1 { font-size: 15px; margin: 0; letter-spacing: .2px; font-weight: 600; }
-      .app-header .subtitle { font-size: 12px; opacity: .8; }
-
+      /* Control panel (kept) */
       .control-panel {
-        position: fixed; z-index: 1000; top: 64px; right: 12px;
+        position: fixed; z-index: 1000; top: 16px; right: 12px;
         background: var(--panel); backdrop-filter: blur(6px);
-        border: 1px solid #1f2937; border-radius: 16px; padding: 10px 12px; min-width: 280px;
+        border: 1px solid #1f2937; border-radius: 16px; padding: 12px 14px; min-width: 320px;
         box-shadow: 0 8px 24px rgba(0,0,0,.35);
       }
-      .control-panel h2 { font-size: 13px; margin: 0 0 6px; font-weight: 700; }
-      .row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
-      .row button, .row select { padding: 6px 10px; border-radius: 10px; border: 1px solid #374151; background: #0b1220; color: var(--text); }
-      .row button { cursor: pointer; }
-      .row label { font-size: 12px; opacity: .9; }
-      .footnote { font-size: 11px; opacity: .75; margin-top: 8px; }
+      .control-panel h2 { font-size: 1rem; margin: 0 0 8px; font-weight: 700; }
+      .row { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
+      .row button, .row select {
+        padding: 8px 12px; border-radius: 10px; border: 1px solid #374151; background: #0b1220; color: var(--text);
+        font-size: .95rem; cursor: pointer;
+      }
+      .row label { font-size: .95rem; opacity: .9; }
+      .footnote { font-size: .85rem; opacity: .75; margin-top: 8px; }
 
+      /* Legend */
       .legend {
         position: fixed; z-index: 1000; bottom: 12px; left: 12px;
-        background: var(--panel); border: 1px solid #1f2937; border-radius: 12px; padding: 8px 10px; font-size: 12px;
+        background: var(--panel); border: 1px solid #1f2937; border-radius: 12px; padding: 10px 12px; font-size: .95rem;
       }
-      .legend .swatch { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; }
+      .legend .swatch { display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:6px; }
       .legend .item { margin-right:12px; white-space:nowrap; }
 
       .leaflet-container { background: #0b1020; }
-      .leaflet-control-attribution { background: rgba(17, 24, 39, .6); color: #cbd5e1; }
-      .leaflet-popup-content { color: #0b1220; }
+      .leaflet-control-attribution { background: rgba(17, 24, 39, .6); color: #cbd5e1; font-size: .8rem; }
+      .leaflet-popup-content { color: #0b1220; font-size: .95rem; }
       a { color: var(--accent); }
 
-      /* Pulse highlight for focused company */
-      @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 rgba(59,130,246,0.6); }
-        70% { box-shadow: 0 0 0 12px rgba(59,130,246,0); }
-        100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
-      }
-      .pulse {
-        animation: pulse 2s infinite;
-      }
       .svg-icon { filter: drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
     </style>
   </head>
   <body>
-    <div class="app-header" role="banner" aria-label="Investor Company Map">
-      <h1>Investor ↔ Company Map</h1>
-      <div class="subtitle">Red = Investors • Blue = Public Companies • Arcs show relationships</div>
-    </div>
+    <!-- Removed the floating “Investor <> Company Map” header on purpose -->
 
     <!-- Company focus / cycling panel -->
     <div class="control-panel" id="controls" aria-label="Map controls">
@@ -96,7 +84,7 @@
       <div class="row">
         <label><input type="checkbox" id="showAllLinks" /> Show all arcs</label>
       </div>
-      <div id="companyMeta" style="font-size:12px; line-height:1.4; opacity:.9;"></div>
+      <div id="companyMeta" style="font-size:.95rem; line-height:1.5; opacity:.95;"></div>
       <div class="footnote">Data: <code>data/graph.json</code></div>
     </div>
 
@@ -104,7 +92,7 @@
     <div class="legend">
       <span class="item"><span class="swatch" style="background:var(--blue)"></span>Company</span>
       <span class="item"><span class="swatch" style="background:var(--red)"></span>Investor</span>
-      <span class="item">▲ Mar‑a‑Lago</span>
+      <span class="item">▲ Mar-a-Lago</span>
       <span class="item">★ White House</span>
     </div>
 
@@ -131,7 +119,7 @@
       // --- 2) Load your graph data ---
       // Schema in data/graph.json:
       // {
-      //   "companies": [{ id, ticker, name, lat, lng, address?, desc?, long_short?, why?, price? }],
+      //   "companies": [{ id, ticker, name, lat, lng, address?, desc?, long_short?, "Potential QPQ"?, price? }],
       //   "investors": [{ id, name, lat, lng, address?, notes? }],
       //   "links": [{ investor_id, company_id, units?, instrument? }],
       //   "landmarks": [{ name, lat, lng, type: "triangle"|"star", url? }]
@@ -147,10 +135,10 @@
           console.warn(err.message);
           // --- SAMPLE DATA (edit by copying to data/graph.json) ---
           companies = [
-            { id: 'NG', ticker: 'NG', name: 'NOVAGOLD RESOURCES INC.', lat: 61.869, lng: -158.106, address: 'PO Box 69, Crooked Creek, AK 99575', desc: 'A goldmine in Alaska', long_short: 'Short', why: "Because the mine won\'t be built and the ticker is a way to hype gold to investors and then dump worthless shares to them.", price: 6.7 }
+            { id: 'NG', ticker: 'NG', name: 'NOVAGOLD RESOURCES INC.', lat: 61.869, lng: -158.106, address: 'PO Box 69, Crooked Creek, AK 99575', desc: 'A goldmine in Alaska', long_short: 'Coming Soon', "Potential QPQ": "Public funds could be used to finance the infrastructure to the mine. The US might want to take a stake in the mine for its gold prospects.", price: 6.7 }
           ];
           investors = [
-            { id: 'ghisallo', name: 'Ghisallo Capital Management LLC', lat: 42.349, lng: -71.085, address: '240 Newbury St, 2nd Fl, Boston, MA 02116', notes: "Trump\'s Treasury pick Bessent reportedly seeded this hedge fund." },
+            { id: 'ghisallo', name: 'Ghisallo Capital Management LLC', lat: 42.349, lng: -71.085, address: '240 Newbury St, 2nd Fl, Boston, MA 02116', notes: "Trump's Treasury pick Bessent reportedly seeded this hedge fund." },
             { id: 'bam', name: 'Balyasny Asset Management L.P.', lat: 30.267, lng: -97.743, address: '303 Colorado St, Austin, TX 78701', notes: 'Holds QXO & DWAC positions.' }
           ];
           links = [
@@ -166,7 +154,6 @@
       }
 
       function initialize() {
-        // Build markers
         companyLayer.clearLayers(); investorLayer.clearLayers(); linkLayer.clearLayers(); landmarkLayer.clearLayers();
         markersById.company = {}; markersById.investor = {};
 
@@ -185,14 +172,12 @@
           markersById.investor[i.id] = m;
         });
 
-        // Landmarks
         landmarks.forEach(l => {
           const icon = shapeIcon(l.type, l.type === 'triangle' ? '#f97316' : '#fbbf24');
           const m = L.marker([l.lat, l.lng], { icon }).bindPopup(landmarkPopup(l));
           m.addTo(landmarkLayer);
         });
 
-        // Populate company selector
         const sel = document.getElementById('companySelect');
         sel.innerHTML = companies.map((c, idx) => `<option value="${idx}">${escapeHTML(c.ticker || c.id)} — ${escapeHTML(c.name || '')}</option>`).join('');
         sel.addEventListener('change', (e) => { focusedIndex = Number(e.target.value); focusCompany(); });
@@ -200,10 +185,8 @@
         document.getElementById('nextBtn').onclick = () => { focusedIndex = (focusedIndex + 1) % companies.length; sel.value = focusedIndex; focusCompany(); };
         document.getElementById('showAllLinks').addEventListener('change', updateLinksVisibility);
 
-        // Initial focus
         focusCompany();
 
-        // Fit all markers initially
         const all = [...Object.values(markersById.company), ...Object.values(markersById.investor)];
         if (all.length) {
           const group = L.featureGroup(all);
@@ -216,16 +199,13 @@
         const c = companies[focusedIndex];
         if (!c) return;
 
-        // Style: highlight focused company
         Object.values(markersById.company).forEach(m => m.setStyle({ radius: 7, fillOpacity: 0.9 }));
         const cm = markersById.company[c.id];
         if (cm) { cm.setStyle({ radius: 9, fillOpacity: 1.0 }); try { cm.bringToFront(); } catch (_) {} }
 
-        // Build links for this company (unless showAllLinks checked)
         const showAll = document.getElementById('showAllLinks').checked;
         const subset = showAll ? links : links.filter(l => l.company_id === c.id);
 
-        // Draw arcs
         subset.forEach(lk => {
           const im = markersById.investor[lk.investor_id];
           const cmk = markersById.company[lk.company_id];
@@ -238,11 +218,9 @@
           arc.bindPopup(linkPopup(lk));
         });
 
-        // Metadata panel
         const meta = document.getElementById('companyMeta');
         meta.innerHTML = companyMetaHTML(c);
 
-        // Zoom to company + its investors (for subset)
         const invMarkers = subset
           .filter(l => l.company_id === c.id)
           .map(l => markersById.investor[l.investor_id])
@@ -251,9 +229,7 @@
         try { map.fitBounds(focusGroup.getBounds().pad(0.25)); } catch (_) {}
       }
 
-      function updateLinksVisibility(){
-        focusCompany();
-      }
+      function updateLinksVisibility(){ focusCompany(); }
 
       // --- Popups ---
       function companyPopup(c){
@@ -262,15 +238,15 @@
         if (c.desc) lines.push(`<div><strong>Desc:</strong> ${escapeHTML(c.desc)}</div>`);
         if (c.address) lines.push(`<div><strong>Address:</strong> ${escapeHTML(c.address)}</div>`);
         if (c.long_short) lines.push(`<div><strong>Position:</strong> ${escapeHTML(c.long_short)}</div>`);
-        if (c.why) lines.push(`<div><strong>Why:</strong> ${escapeHTML(c.why)}</div>`);
+        if (c["Potential QPQ"]) lines.push(`<div><strong>Potential QPQ:</strong> ${escapeHTML(c["Potential QPQ"])}</div>`);
         if (c.price != null) lines.push(`<div><strong>Current Price:</strong> ${escapeHTML(String(c.price))}</div>`);
-        return `<div><h3 style="margin:0 0 6px;font-size:16px;">${escapeHTML(c.name||'Company')}</h3>${lines.join('')}</div>`;
+        return `<div><h3 style="margin:0 0 6px;font-size:1.05rem;">${escapeHTML(c.name||'Company')}</h3>${lines.join('')}</div>`;
       }
       function investorPopup(i){
         const lines = [];
         if (i.address) lines.push(`<div><strong>Address:</strong> ${escapeHTML(i.address)}</div>`);
-        if (i.notes) lines.push(`<div><strong>Notes:</strong> ${escapeHTML(i.notes)}</div>`);
-        return `<div><h3 style="margin:0 0 6px;font-size:16px;">${escapeHTML(i.name||'Investor')}</h3>${lines.join('')}</div>`;
+        if (i.notes)   lines.push(`<div><strong>Connection:</strong> ${escapeHTML(i.notes)}</div>`); /* CHANGED label */
+        return `<div><h3 style="margin:0 0 6px;font-size:1.05rem;">${escapeHTML(i.name||'Investor')}</h3>${lines.join('')}</div>`;
       }
       function linkPopup(lk){
         const inv = investors.find(x=>x.id===lk.investor_id);
@@ -284,14 +260,13 @@
       }
       function landmarkPopup(l){
         const url = l.url ? `<div><a href="${encodeURI(l.url)}" target="_blank" rel="noopener">Website</a></div>` : '';
-        return `<div><h3 style="margin:0 0 6px;font-size:16px;">${escapeHTML(l.name)}</h3>${url}</div>`;
+        return `<div><h3 style="margin:0 0 6px;font-size:1.05rem;">${escapeHTML(l.name)}</h3>${url}</div>`;
       }
 
       // --- Helpers ---
       function escapeHTML(str = '') { return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[s])); }
       function getVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
 
-      // SVG shape icons (triangle / star)
       function shapeIcon(type, fillColor){
         let svg = '';
         if (type === 'triangle') {
@@ -302,15 +277,14 @@
         return L.divIcon({ html: svg, className: 'custom-shape', iconSize: [28,28], iconAnchor: [14,14] });
       }
 
-      // Generate a simple curved arc (quadratic Bezier) between two lat/lngs
+      // Quadratic Bezier arc between two lat/lngs
       function arcPoints(a, b, strength = 0.25, segments = 64){
         const [lat1, lng1] = a, [lat2, lng2] = b;
         const dx = lng2 - lng1, dy = lat2 - lat1;
         const mx = (lat1 + lat2) / 2, my = (lng1 + lng2) / 2;
-        // Perpendicular vector (normalized)
         let nx = -dy, ny = dx; const norm = Math.hypot(nx, ny) || 1; nx /= norm; ny /= norm;
         const dist = Math.hypot(dx, dy);
-        const k = strength * dist; // scale curve with distance
+        const k = strength * dist;
         const cx = my + ny * k; // control lng
         const cy = mx + nx * k; // control lat
         const pts = [];
@@ -322,78 +296,14 @@
         return pts;
       }
 
-      function companyMetaHTML(c){
-        const fields = [
-          c.ticker ? `<div><strong>Ticker:</strong> ${escapeHTML(c.ticker)}</div>` : '',
-          c.desc ? `<div><strong>Desc:</strong> ${escapeHTML(c.desc)}</div>` : '',
-          c.long_short ? `<div><strong>Position:</strong> ${escapeHTML(c.long_short)}</div>` : '',
-          c.why ? `<div><strong>Why:</strong> ${escapeHTML(c.why)}</div>` : '',
-          (c.price != null) ? `<div><strong>Price:</strong> ${escapeHTML(String(c.price))}</div>` : ''
-        ].join('');
-        return fields;
-      }
-
-      // Kick off
       loadData();
     </script>
 
     <!--
-    ======================================
     HOW TO USE (No git; copy-paste in GitHub)
-    ======================================
-    1) Create repo: optionsregards.github.io (or any project repo if nested URL)
-    2) Add this file as index.html at the repo root.
-    3) Create data/graph.json with your data, e.g.
-
-    {
-      "companies": [
-        {
-          "id": "NG",
-          "ticker": "NG",
-          "name": "NOVAGOLD RESOURCES INC.",
-          "lat": 61.869,
-          "lng": -158.106,
-          "address": "PO Box 69, Crooked Creek, AK 99575",
-          "desc": "A goldmine in Alaska",
-          "long_short": "Short",
-          "why": "Because the mine won't be built and the ticker is a way to hype gold to investors and then dump worthless shares to them.",
-          "price": 6.7
-        }
-      ],
-      "investors": [
-        {
-          "id": "ghisallo",
-          "name": "Ghisallo Capital Management LLC",
-          "lat": 42.349,
-          "lng": -71.085,
-          "address": "240 Newbury St, 2nd Fl, Boston, MA 02116",
-          "notes": "Trump's Treasury pick Bessent reportedly seeded this hedge fund."
-        },
-        {
-          "id": "bam",
-          "name": "Balyasny Asset Management L.P.",
-          "lat": 30.267,
-          "lng": -97.743,
-          "address": "303 Colorado St, Austin, TX 78701",
-          "notes": "Holds QXO & DWAC positions."
-        }
-      ],
-      "links": [
-        { "investor_id": "ghisallo", "company_id": "NG", "units": 1741510, "instrument": "Shares" },
-        { "investor_id": "bam", "company_id": "NG", "units": 585351, "instrument": "Shares" }
-      ],
-      "landmarks": [
-        { "name": "Mar-a-Lago", "lat": 26.677, "lng": -80.034, "type": "triangle" },
-        { "name": "The White House", "lat": 38.8977, "lng": -77.0365, "type": "star" }
-      ]
-    }
-
-    Notes
-    • Red circle = investor, Blue circle = company. Arcs connect investor → company.
-    • Use real lat/lng for addresses (paste from Google Maps). Keep IDs unique.
-    • The right panel lets you cycle companies (Prev/Next or dropdown). The map zooms to that company and its investors.
-    • Tick “Show all arcs” to see the full network at once.
-    • To add more landmarks, append to the "landmarks" array with type "triangle" or "star".
+    1) Repo root: index.html (this file)
+    2) Create data/graph.json (see below sample)
+    3) Settings → Pages → Deploy from a branch → main / root
     -->
   </body>
 </html>
